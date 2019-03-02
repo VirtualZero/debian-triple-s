@@ -2,7 +2,7 @@
 
 create_cert() {
     openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt;
-    sudo openssl dhparam -out /etc/nginx/dhparam.pem 4096;
+    openssl dhparam -out /etc/nginx/dhparam.pem 4096;
 }
 
 create_config_files() {
@@ -54,6 +54,7 @@ create_nginx_virtual_host_file() {
     echo -e '\tlisten [::]:80;' >> /etc/nginx/sites-available/${app_name};
     echo -e '\treturn 302 https://$host$request_uri;' >> /etc/nginx/sites-available/${app_name};
     echo '}' >> /etc/nginx/sites-available/${app_name};
+    ln -s /etc/nginx/sites-available/${app_name} /etc/nginx/sites-enabled;
 }
 
 restart_nginx() {
